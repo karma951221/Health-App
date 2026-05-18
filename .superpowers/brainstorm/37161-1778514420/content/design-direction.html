@@ -1,0 +1,112 @@
+<h2>디자인 무드 — 어떤 분위기가 맞나요?</h2>
+<p class="subtitle">daylog 앱 전체 팔레트·톤의 기준이 됩니다. 가장 끌리는 방향을 골라주세요.</p>
+
+<style>
+  .swatch-row { display: flex; gap: 6px; margin-bottom: 10px; }
+  .swatch { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; }
+  .card-preview {
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0D0D0D; padding: 20px;">
+      <div class="swatch-row">
+        <div class="swatch" style="background:#0D0D0D;border:1px solid #333"></div>
+        <div class="swatch" style="background:#1A1A1A"></div>
+        <div class="swatch" style="background:#00E5A0"></div>
+        <div class="swatch" style="background:#FF6B35"></div>
+        <div class="swatch" style="background:#FFFFFF"></div>
+      </div>
+      <div class="card-preview" style="background:#1A1A1A; color:#FFF;">
+        <span class="tag" style="background:#00E5A0;color:#000">운동</span>
+        <div style="font-size:15px;font-weight:700;">스쿼트 3세트 완료</div>
+        <div style="color:#888;font-size:12px;">오늘 07:32</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Dark &amp; Energetic</h3>
+      <p>거의 검정 배경 + 네온 그린 액센트. 운동 앱 특유의 긴장감과 집중. 눈 피로 적음.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F5F5F5; padding: 20px;">
+      <div class="swatch-row">
+        <div class="swatch" style="background:#FFFFFF;border:1px solid #DDD"></div>
+        <div class="swatch" style="background:#F5F5F5;border:1px solid #DDD"></div>
+        <div class="swatch" style="background:#3B82F6"></div>
+        <div class="swatch" style="background:#10B981"></div>
+        <div class="swatch" style="background:#1C1C1E"></div>
+      </div>
+      <div class="card-preview" style="background:#FFFFFF; color:#1C1C1E; box-shadow:0 1px 4px rgba(0,0,0,.10);">
+        <span class="tag" style="background:#DBEAFE;color:#1D4ED8">운동</span>
+        <div style="font-size:15px;font-weight:600;">스쿼트 3세트 완료</div>
+        <div style="color:#6B7280;font-size:12px;">오늘 07:32</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Clean &amp; Light</h3>
+      <p>흰 배경 + 블루/그린 투 톤. Apple Health 느낌. 심플하고 읽기 편함.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#FDF6EE; padding: 20px;">
+      <div class="swatch-row">
+        <div class="swatch" style="background:#FDF6EE;border:1px solid #E5D5C3"></div>
+        <div class="swatch" style="background:#FFF8F1;border:1px solid #E5D5C3"></div>
+        <div class="swatch" style="background:#D97706"></div>
+        <div class="swatch" style="background:#16A34A"></div>
+        <div class="swatch" style="background:#1C1917"></div>
+      </div>
+      <div class="card-preview" style="background:#FFF8F1; color:#1C1917; border:1px solid #E5D5C3;">
+        <span class="tag" style="background:#FEF3C7;color:#92400E">운동</span>
+        <div style="font-size:15px;font-weight:600;">스쿼트 3세트 완료</div>
+        <div style="color:#78716C;font-size:12px;">오늘 07:32</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Warm &amp; Natural</h3>
+      <p>크림/오프화이트 배경 + 앰버·그린 액센트. 다이어리 앱 느낌. 따뜻하고 편안.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#FFFFFF; padding: 20px;">
+      <div class="swatch-row">
+        <div class="swatch" style="background:#000000"></div>
+        <div class="swatch" style="background:#171717"></div>
+        <div class="swatch" style="background:#F5F5F5;border:1px solid #DDD"></div>
+        <div class="swatch" style="background:#FFFFFF;border:1px solid #DDD"></div>
+        <div class="swatch" style="background:#EF4444"></div>
+      </div>
+      <div class="card-preview" style="background:#000; color:#FFF;">
+        <span class="tag" style="background:#FFF;color:#000">운동</span>
+        <div style="font-size:15px;font-weight:700;">스쿼트 3세트 완료</div>
+        <div style="color:#A3A3A3;font-size:12px;">오늘 07:32</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>D. Bold Monochrome</h3>
+      <p>흑백 기반 + 포인트 레드. 강렬하고 미니멀. Nike·Things 앱 계열 미학.</p>
+    </div>
+  </div>
+
+</div>

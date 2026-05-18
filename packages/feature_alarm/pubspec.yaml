@@ -1,0 +1,25 @@
+name: feature_alarm
+description: A pure Dart package for alarm feature logic.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  # Internal Packages
+  app_shared:
+    path: ../app_shared
+  infra_local_db:
+    path: ../infra_local_db
+  
+  # External Packages (Pure Dart)
+  bloc: ^9.0.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.12.0
+
+dev_dependencies:
+  test: ^1.24.0
+  build_runner: ^2.4.6
+  freezed: ^3.2.5
+  json_serializable: ^6.8.0

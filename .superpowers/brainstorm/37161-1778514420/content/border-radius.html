@@ -1,0 +1,189 @@
+<h2>Border Radius — 모서리 스타일</h2>
+<p class="subtitle">카드·버튼·시트 전체에 적용될 기본 반경입니다. Bold Monochrome 무드 기준으로 비교해보세요.</p>
+
+<style>
+  .preview-wrap { display: flex; gap: 10px; margin-top: 12px; }
+  .screen-mock {
+    flex: 1;
+    background: #18181B;
+    border-radius: 14px;
+    padding: 14px;
+    color: #FAFAFA;
+  }
+  .screen-mock-light {
+    flex: 1;
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 14px;
+    color: #18181B;
+    border: 1px solid #E4E4E7;
+  }
+  .mock-card { padding: 12px 14px; margin-bottom: 8px; background: #27272A; color: #FAFAFA; }
+  .mock-card-light { padding: 12px 14px; margin-bottom: 8px; background: #F4F4F5; color: #18181B; }
+  .mock-tag { display:inline-block; font-size:10px; font-weight:700; padding:2px 9px; background:#EF4444; color:#fff; margin-bottom:6px; }
+  .mock-title { font-size:13px; font-weight:700; margin-bottom:2px; }
+  .mock-sub { font-size:11px; opacity:.5; }
+  .mock-fab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    background: #EF4444;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .mock-btn {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 16px;
+    background: #EF4444;
+    color: #fff;
+    margin-top: 6px;
+  }
+  .mode-badge { font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.35; margin-bottom:8px; }
+</style>
+
+<div class="cards">
+
+  <!-- A: Sharp (radius 4) -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#E4E4E7;">
+      <div class="preview-wrap">
+        <div class="screen-mock">
+          <div class="mode-badge">dark</div>
+          <div class="mock-card" style="border-radius:4px;">
+            <span class="mock-tag" style="border-radius:4px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card" style="border-radius:4px;">
+            <span class="mock-tag" style="border-radius:4px;background:#FAFAFA;color:#18181B;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:4px;">+</div>
+            <div class="mock-btn" style="border-radius:4px;">저장</div>
+          </div>
+        </div>
+        <div class="screen-mock-light">
+          <div class="mode-badge">light</div>
+          <div class="mock-card-light" style="border-radius:4px;">
+            <span class="mock-tag" style="border-radius:4px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card-light" style="border-radius:4px;">
+            <span class="mock-tag" style="border-radius:4px;background:#18181B;color:#fff;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:4px;">+</div>
+            <div class="mock-btn" style="border-radius:4px;">저장</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Sharp — radius 4</h3>
+      <p>거의 직각. Nike·Linear 계열. Bold Monochrome 무드에 가장 날카롭고 강한 인상.</p>
+    </div>
+  </div>
+
+  <!-- B: Balanced (radius 12) -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#E4E4E7;">
+      <div class="preview-wrap">
+        <div class="screen-mock">
+          <div class="mode-badge">dark</div>
+          <div class="mock-card" style="border-radius:12px;">
+            <span class="mock-tag" style="border-radius:6px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card" style="border-radius:12px;">
+            <span class="mock-tag" style="border-radius:6px;background:#FAFAFA;color:#18181B;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:12px;">+</div>
+            <div class="mock-btn" style="border-radius:8px;">저장</div>
+          </div>
+        </div>
+        <div class="screen-mock-light">
+          <div class="mode-badge">light</div>
+          <div class="mock-card-light" style="border-radius:12px;">
+            <span class="mock-tag" style="border-radius:6px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card-light" style="border-radius:12px;">
+            <span class="mock-tag" style="border-radius:6px;background:#18181B;color:#fff;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:12px;">+</div>
+            <div class="mock-btn" style="border-radius:8px;">저장</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Balanced — radius 12</h3>
+      <p>적당히 둥근 카드. Material 3 기본값 근처. 날카로움과 부드러움 사이의 균형.</p>
+    </div>
+  </div>
+
+  <!-- C: Pill-soft (radius 20) -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#E4E4E7;">
+      <div class="preview-wrap">
+        <div class="screen-mock">
+          <div class="mode-badge">dark</div>
+          <div class="mock-card" style="border-radius:20px;">
+            <span class="mock-tag" style="border-radius:20px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card" style="border-radius:20px;">
+            <span class="mock-tag" style="border-radius:20px;background:#FAFAFA;color:#18181B;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:20px;">+</div>
+            <div class="mock-btn" style="border-radius:20px;">저장</div>
+          </div>
+        </div>
+        <div class="screen-mock-light">
+          <div class="mode-badge">light</div>
+          <div class="mock-card-light" style="border-radius:20px;">
+            <span class="mock-tag" style="border-radius:20px;">운동</span>
+            <div class="mock-title">스쿼트 3세트</div>
+            <div class="mock-sub">07:32 AM</div>
+          </div>
+          <div class="mock-card-light" style="border-radius:20px;">
+            <span class="mock-tag" style="border-radius:20px;background:#18181B;color:#fff;">식단</span>
+            <div class="mock-title">닭가슴살 샐러드</div>
+            <div class="mock-sub">12:10 PM</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <div class="mock-fab" style="border-radius:20px;">+</div>
+            <div class="mock-btn" style="border-radius:20px;">저장</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Soft Pill — radius 20</h3>
+      <p>pill형 태그·버튼. 부드럽고 현대적. Bold 무드와는 조금 대비되지만 접근성 높음.</p>
+    </div>
+  </div>
+
+</div>

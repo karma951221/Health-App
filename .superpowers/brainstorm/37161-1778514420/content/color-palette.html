@@ -1,0 +1,187 @@
+<h2>컬러 팔레트 — 레드 계열 + 흑백 조합</h2>
+<p class="subtitle">각 옵션은 다크·라이트 모드 두 쌍으로 보여줍니다. 앱 카드 실제 느낌으로 확인하세요.</p>
+
+<style>
+  .palette-wrap { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .mode-row { display: flex; gap: 10px; }
+  .screen-mock {
+    flex: 1;
+    border-radius: 14px;
+    padding: 16px;
+    min-height: 160px;
+    position: relative;
+  }
+  .mode-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .4;
+    margin-bottom: 10px;
+  }
+  .mock-item {
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .mock-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .mock-sub { font-size: 11px; opacity: .55; }
+  .mock-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .swatch-strip { display: flex; gap: 5px; margin-top: 8px; }
+  .sw { width: 22px; height: 22px; border-radius: 5px; }
+</style>
+
+<div class="cards">
+
+  <!-- Option A: Pure Black / Pure White + Crimson Red -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#eee;">
+      <div class="palette-wrap">
+        <div class="mode-row">
+          <div class="screen-mock" style="background:#000; color:#fff;">
+            <div class="mode-badge">dark</div>
+            <div class="mock-item" style="background:#141414;">
+              <span class="mock-tag" style="background:#DC2626;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#141414;">
+              <span class="mock-tag" style="background:#fff;color:#000;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub">12:10 PM</div>
+            </div>
+          </div>
+          <div class="screen-mock" style="background:#fff; color:#000; border:1px solid #ddd;">
+            <div class="mode-badge">light</div>
+            <div class="mock-item" style="background:#F5F5F5;">
+              <span class="mock-tag" style="background:#DC2626;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub" style="color:#555;">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#F5F5F5;">
+              <span class="mock-tag" style="background:#000;color:#fff;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub" style="color:#555;">12:10 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-strip">
+          <div class="sw" style="background:#000;border:1px solid #333" title="bg dark"></div>
+          <div class="sw" style="background:#141414" title="surface dark"></div>
+          <div class="sw" style="background:#fff;border:1px solid #ccc" title="bg light"></div>
+          <div class="sw" style="background:#F5F5F5;border:1px solid #ccc" title="surface light"></div>
+          <div class="sw" style="background:#DC2626" title="primary red"></div>
+          <div class="sw" style="background:#FCA5A5" title="red light variant"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 퓨어 블랙 + 크림슨 #DC2626</h3>
+      <p>가장 강렬한 대비. 정통 Bold Monochrome. 레드가 강하게 튀어 포인트 역할 명확.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Off-black / Off-white + Scarlet -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#eee;">
+      <div class="palette-wrap">
+        <div class="mode-row">
+          <div class="screen-mock" style="background:#0F0F0F; color:#F2F2F2;">
+            <div class="mode-badge">dark</div>
+            <div class="mock-item" style="background:#1C1C1C;">
+              <span class="mock-tag" style="background:#E53E3E;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#1C1C1C;">
+              <span class="mock-tag" style="background:#F2F2F2;color:#0F0F0F;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub">12:10 PM</div>
+            </div>
+          </div>
+          <div class="screen-mock" style="background:#FAFAFA; color:#0F0F0F; border:1px solid #ddd;">
+            <div class="mode-badge">light</div>
+            <div class="mock-item" style="background:#EFEFEF;">
+              <span class="mock-tag" style="background:#E53E3E;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub" style="color:#666;">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#EFEFEF;">
+              <span class="mock-tag" style="background:#0F0F0F;color:#fff;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub" style="color:#666;">12:10 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-strip">
+          <div class="sw" style="background:#0F0F0F" title="bg dark"></div>
+          <div class="sw" style="background:#1C1C1C" title="surface dark"></div>
+          <div class="sw" style="background:#FAFAFA;border:1px solid #ccc" title="bg light"></div>
+          <div class="sw" style="background:#EFEFEF;border:1px solid #ccc" title="surface light"></div>
+          <div class="sw" style="background:#E53E3E" title="primary red"></div>
+          <div class="sw" style="background:#FEB2B2" title="red light variant"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 오프 블랙 + 스칼렛 #E53E3E</h3>
+      <p>약간 부드러운 검정(#0F0F0F)으로 눈 피로 덜함. 레드는 조금 더 따뜻한 톤.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Zinc / Slate + Vivid Red -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#eee;">
+      <div class="palette-wrap">
+        <div class="mode-row">
+          <div class="screen-mock" style="background:#18181B; color:#FAFAFA;">
+            <div class="mode-badge">dark</div>
+            <div class="mock-item" style="background:#27272A;">
+              <span class="mock-tag" style="background:#EF4444;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#27272A;">
+              <span class="mock-tag" style="background:#FAFAFA;color:#18181B;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub">12:10 PM</div>
+            </div>
+          </div>
+          <div class="screen-mock" style="background:#FFFFFF; color:#18181B; border:1px solid #ddd;">
+            <div class="mode-badge">light</div>
+            <div class="mock-item" style="background:#F4F4F5;">
+              <span class="mock-tag" style="background:#EF4444;color:#fff;">운동</span>
+              <div class="mock-title">스쿼트 3세트</div>
+              <div class="mock-sub" style="color:#71717A;">07:32 AM</div>
+            </div>
+            <div class="mock-item" style="background:#F4F4F5;">
+              <span class="mock-tag" style="background:#18181B;color:#fff;">식단</span>
+              <div class="mock-title">닭가슴살 샐러드</div>
+              <div class="mock-sub" style="color:#71717A;">12:10 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch-strip">
+          <div class="sw" style="background:#18181B" title="bg dark (zinc-900)"></div>
+          <div class="sw" style="background:#27272A" title="surface dark (zinc-800)"></div>
+          <div class="sw" style="background:#FFFFFF;border:1px solid #ccc" title="bg light"></div>
+          <div class="sw" style="background:#F4F4F5;border:1px solid #ccc" title="surface light (zinc-100)"></div>
+          <div class="sw" style="background:#EF4444" title="primary red (red-500)"></div>
+          <div class="sw" style="background:#FECACA" title="red light variant (red-200)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Zinc + Tailwind Red-500 #EF4444</h3>
+      <p>Zinc 계열(청회색 빛 검정). 요즘 트렌디한 다크 UI. 레드가 약간 밝고 선명.</p>
+    </div>
+  </div>
+
+</div>

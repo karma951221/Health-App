@@ -1,0 +1,128 @@
+<h2>폰트 패밀리 — 어떤 서체가 맞나요?</h2>
+<p class="subtitle">한글+영문 혼용. Bold Monochrome 무드 기준으로 고른 후보들입니다.</p>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap');
+
+  .font-demo {
+    padding: 20px;
+    border-radius: 12px;
+    background: #0a0a0a;
+    color: #fff;
+    margin-top: 10px;
+  }
+  .font-demo-light {
+    padding: 20px;
+    border-radius: 12px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #e5e5e5;
+    margin-top: 10px;
+  }
+  .demo-label {
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .45;
+    margin-bottom: 10px;
+  }
+  .demo-headline { font-size: 26px; font-weight: 700; line-height: 1.2; margin-bottom: 6px; }
+  .demo-body { font-size: 14px; font-weight: 400; opacity: .7; line-height: 1.5; margin-bottom: 8px; }
+  .demo-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #ef4444;
+    color: #fff;
+    margin-right: 6px;
+  }
+  .demo-tag-outline {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+    margin-right: 6px;
+  }
+  .label-row { display:flex; gap:8px; margin-top:6px; flex-wrap:wrap; }
+</style>
+
+<div class="cards">
+
+  <!-- A: Pretendard -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; background:#f9f9f9;">
+      <div class="font-demo" style="font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
+        <div class="demo-label">Pretendard</div>
+        <div class="demo-headline">오늘 운동 완료 💪</div>
+        <div class="demo-body">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+        <div class="label-row">
+          <span class="demo-tag">알람</span>
+          <span class="demo-tag-outline">식단</span>
+        </div>
+      </div>
+      <div class="font-demo-light" style="font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif;">
+        <div class="demo-label" style="color:#000">Pretendard — Light</div>
+        <div class="demo-headline" style="color:#000">오늘 운동 완료 💪</div>
+        <div class="demo-body" style="color:#555">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Pretendard</h3>
+      <p>국내 모던 앱의 사실상 표준. 굵기 9단계, 한글 완성도 최고. <br>pubspec에 폰트 파일 추가 필요 (라이선스 무료).</p>
+    </div>
+  </div>
+
+  <!-- B: Noto Sans KR + Inter -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; background:#f9f9f9;">
+      <div class="font-demo" style="font-family:'Noto Sans KR','Inter',sans-serif;">
+        <div class="demo-label">Noto Sans KR</div>
+        <div class="demo-headline">오늘 운동 완료 💪</div>
+        <div class="demo-body">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+        <div class="label-row">
+          <span class="demo-tag">알람</span>
+          <span class="demo-tag-outline">식단</span>
+        </div>
+      </div>
+      <div class="font-demo-light" style="font-family:'Noto Sans KR','Inter',sans-serif;">
+        <div class="demo-label" style="color:#000">Noto Sans KR — Light</div>
+        <div class="demo-headline" style="color:#000">오늘 운동 완료 💪</div>
+        <div class="demo-body" style="color:#555">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Noto Sans KR</h3>
+      <p>Google 공식 한글 폰트. google_fonts 패키지로 바로 사용. 안정적이지만 Pretendard보다 약간 무거운 느낌.</p>
+    </div>
+  </div>
+
+  <!-- C: System (SF Pro / Roboto) -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; background:#f9f9f9;">
+      <div class="font-demo" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <div class="demo-label">System Font</div>
+        <div class="demo-headline">오늘 운동 완료 💪</div>
+        <div class="demo-body">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+        <div class="label-row">
+          <span class="demo-tag">알람</span>
+          <span class="demo-tag-outline">식단</span>
+        </div>
+      </div>
+      <div class="font-demo-light" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <div class="demo-label" style="color:#000">System — Light</div>
+        <div class="demo-headline" style="color:#000">오늘 운동 완료 💪</div>
+        <div class="demo-body" style="color:#555">스쿼트 3세트 · 07:32 AM — 미라클 모닝</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 시스템 폰트</h3>
+      <p>iOS: SF Pro, Android: Roboto. 번들 크기 0. 플랫폼 네이티브 느낌. iOS·Android 간 렌더링 차이 있음.</p>
+    </div>
+  </div>
+
+</div>
