@@ -42,12 +42,16 @@ dependencies:
     path: packages/infra_local_db
   feature_alarm:
     path: packages/feature_alarm
+  feature_weather:
+    path: packages/feature_weather
+  feature_settings:
+    path: packages/feature_settings
   provider: ^6.1.1
   flutter_bloc: ^9.1.1
+  shared_preferences: ^2.2.0
   alarm: ^5.0.0
   permission_handler: ^12.0.0
   geolocator: ^13.0.1
-  http: ^1.2.2
   flutter_svg: ^2.0.0
 
 dev_dependencies:

@@ -1,5 +1,5 @@
-name: feature_alarm
-description: A Flutter package for alarm feature logic.
+name: feature_weather
+description: A pure Dart package for weather feature logic.
 version: 0.0.1
 publish_to: none
 
@@ -10,14 +10,12 @@ dependencies:
   # Internal Packages
   app_shared:
     path: ../app_shared
-  infra_local_db:
-    path: ../infra_local_db
-  
+
   # External Packages
   flutter:
     sdk: flutter
-  alarm: ^5.0.0
   bloc: ^9.0.0
+  dio: ^5.8.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.12.0
 

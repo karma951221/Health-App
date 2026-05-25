@@ -1,8 +1,8 @@
 import 'package:app_ui/app_ui.dart';
+import 'package:feature_weather/feature_weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/weather/weather_service.dart';
 import 'morning_briefing_cubit.dart';
 
 /// 알람을 해제하면 나타나는 "좋은 아침" 브리핑 화면.
@@ -12,7 +12,11 @@ class MorningBriefingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MorningBriefingCubit(WeatherService())..load(),
+      create: (_) => MorningBriefingCubit(
+        FetchWeatherUseCase(
+          WeatherRepositoryImpl(WeatherRemoteDataSourceImpl()),
+        ),
+      )..load(),
       child: const _MorningBriefingView(),
     );
   }
@@ -120,7 +124,7 @@ class _Body extends StatelessWidget {
 class _WeatherCard extends StatelessWidget {
   const _WeatherCard({required this.weather});
 
-  final MorningWeather weather;
+  final Weather weather;
 
   @override
   Widget build(BuildContext context) {

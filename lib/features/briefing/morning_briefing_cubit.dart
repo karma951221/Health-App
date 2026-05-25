@@ -1,7 +1,8 @@
+import 'package:feature_weather/feature_weather.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../core/weather/weather_service.dart';
+export 'package:feature_weather/feature_weather.dart' show Weather;
 
 enum BriefingStatus {
   loading,
@@ -25,16 +26,16 @@ class MorningBriefingState {
         message = null;
 
   final BriefingStatus status;
-  final MorningWeather? weather;
+  final Weather? weather;
   final String? message;
 }
 
 /// 알람 해제 직후 굿모닝 브리핑: 위치 권한 → 현재 위치 → 날씨 조회.
 class MorningBriefingCubit extends Cubit<MorningBriefingState> {
-  MorningBriefingCubit(this._weatherService)
+  MorningBriefingCubit(this._fetchWeather)
       : super(const MorningBriefingState.loading());
 
-  final WeatherService _weatherService;
+  final FetchWeatherUseCase _fetchWeather;
 
   Future<void> load() async {
     emit(const MorningBriefingState.loading());
@@ -60,20 +61,28 @@ class MorningBriefingCubit extends Cubit<MorningBriefingState> {
       }
 
       final position = await Geolocator.getCurrentPosition();
-      final weather = await _weatherService.fetchByCoordinates(
+      final result = await _fetchWeather(
         latitude: position.latitude,
         longitude: position.longitude,
       );
 
-      emit(
-        MorningBriefingState(
-          status: BriefingStatus.success,
-          weather: weather,
+      result.when(
+        success: (weather) => emit(
+          MorningBriefingState(
+            status: BriefingStatus.success,
+            weather: weather,
+          ),
+        ),
+        failure: (failure) => emit(
+          MorningBriefingState(
+            status: BriefingStatus.failure,
+            message: failure.message,
+          ),
         ),
       );
-    } catch (error) {
+    } catch (_) {
       emit(
-        MorningBriefingState(
+        const MorningBriefingState(
           status: BriefingStatus.failure,
           message: '날씨를 불러오지 못했어요.',
         ),
@@ -86,11 +95,5 @@ class MorningBriefingCubit extends Cubit<MorningBriefingState> {
 
   void _emit(BriefingStatus status) {
     emit(MorningBriefingState(status: status));
-  }
-
-  @override
-  Future<void> close() {
-    _weatherService.dispose();
-    return super.close();
   }
 }
