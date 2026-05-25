@@ -51,11 +51,13 @@ class _FakeAlarmRepository implements AlarmRepository {
 }
 
 class _FakeAlarmRingerService implements AlarmRingerService {
+  final List<Alarm> scheduled = [];
+
   @override
   Future<void> cancelAlarm(int alarmId) async {}
 
   @override
-  Future<void> rescheduleAll(List<Alarm> alarms) async {}
+  Future<void> syncFromStore(List<Alarm> alarms) async {}
 
   @override
   Future<void> scheduleAlarm(Alarm alarm) async {

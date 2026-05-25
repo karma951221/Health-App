@@ -1,5 +1,6 @@
 import 'package:app_shared/app_shared.dart';
 import 'package:feature_alarm/feature_alarm.dart';
+import 'package:feature_alarm/src/data/repositories/alarm_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:infra_local_db/infra_local_db.dart';
 
@@ -58,7 +59,7 @@ class _FakeAlarmLocalDataSource implements AlarmLocalDataSource {
 class _FakeAlarmRingerService implements AlarmRingerService {
   final scheduled = <Alarm>[];
   final canceled = <int>[];
-  final rescheduled = <List<Alarm>>[];
+  final synced = <List<Alarm>>[];
 
   @override
   Future<void> cancelAlarm(int alarmId) async {
@@ -66,8 +67,8 @@ class _FakeAlarmRingerService implements AlarmRingerService {
   }
 
   @override
-  Future<void> rescheduleAll(List<Alarm> alarms) async {
-    rescheduled.add(alarms);
+  Future<void> syncFromStore(List<Alarm> alarms) async {
+    synced.add(alarms);
   }
 
   @override
