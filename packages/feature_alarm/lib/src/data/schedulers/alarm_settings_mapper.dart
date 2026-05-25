@@ -17,13 +17,7 @@ extension AlarmSettingsExtension on Alarm {
       throw ArgumentError('nextScheduledAt must not be null when scheduling');
     }
 
-    final payload = AlarmNotificationPayload(
-      alarmId: id!,
-      hour: hour,
-      minute: minute,
-      label: label,
-      shakeCount: shakeCount,
-    );
+    final payload = AlarmNotificationPayload(alarmId: id!);
 
     return alarm_pkg.AlarmSettings(
       id: id!,

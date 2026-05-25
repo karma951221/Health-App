@@ -48,28 +48,19 @@ void main() {
     });
 
     test('encodes ring-screen data into the payload', () {
-      final settings = alarmSettingsFrom(
-        _alarm(id: 7, hour: 6, minute: 30, label: '아침', shakeCount: 25),
-      );
+      final settings = _alarm(id: 7, hour: 6, minute: 30, label: '아침', shakeCount: 25).toSettings();
 
-      final payload = settings.payload.toAlarmPayload();
+      final payload = settings.payload?.toAlarmPayload();
       expect(payload?.alarmId, 7);
-      expect(payload?.hour, 6);
-      expect(payload?.minute, 30);
-      expect(payload?.label, '아침');
-      expect(payload?.shakeCount, 25);
     });
 
     test('uses the device default sound when no audio path is given', () {
-      final settings = alarmSettingsFrom(_alarm());
+      final settings = _alarm().toSettings();
       expect(settings.assetAudioPath, isNull);
     });
 
     test('uses the provided audio path', () {
-      final settings = alarmSettingsFrom(
-        _alarm(),
-        audioPath: 'assets/audio/alarm.mp3',
-      );
+      final settings = _alarm().toSettings(audioPath: 'assets/audio/alarm.mp3');
       expect(settings.assetAudioPath, 'assets/audio/alarm.mp3');
     });
   });
