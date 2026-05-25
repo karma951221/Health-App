@@ -1,9 +1,13 @@
 import 'package:feature_alarm/feature_alarm.dart';
+import 'package:feature_alarm/src/data/repositories/alarm_repository_impl.dart';
+import 'package:feature_alarm/src/data/schedulers/alarm_ringer_service_impl.dart';
+import 'package:feature_settings/feature_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infra_local_db/infra_local_db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../navigation/app_navigator.dart';
 import '../../features/alarm/alarm_ringing_screen.dart';
@@ -13,10 +17,12 @@ class AppDependencyProvider extends StatelessWidget {
   const AppDependencyProvider({
     super.key,
     required this.alarmRingerService,
+    required this.sharedPreferences,
     required this.child,
   });
 
   final AlarmRingerService alarmRingerService;
+  final SharedPreferences sharedPreferences;
   final Widget child;
 
   @override
@@ -27,6 +33,10 @@ class AppDependencyProvider extends StatelessWidget {
         Provider<AppDatabase>(
           create: (_) => AppDatabase(),
           dispose: (_, db) => db.close(),
+        ),
+
+        Provider<SharedPreferences>(
+          create: (_) => sharedPreferences,
         ),
 
         Provider<AlarmRingerService>(
@@ -40,13 +50,22 @@ class AppDependencyProvider extends StatelessWidget {
             return AlarmUseCases(repo, scheduler: ringer);
           },
         ),
+
+        // 3. Settings UseCases 주입 (SharedPreferences에 의존)
+        ProxyProvider<SharedPreferences, SettingsUseCases>(
+          update: (context, prefs, _) {
+            final dataSource = LocalSettingsDataSource(prefs);
+            final repository = SettingsRepositoryImpl(dataSource);
+            return SettingsUseCases(repository);
+          },
+        ),
       ],
       child: Builder(
         builder: (context) {
           return _AlarmRingBootstrapper(
             child: MultiBlocProvider(
               providers: [
-                // 3. Alarm 관련 Bloc 주입
+                // 4. Alarm 관련 Bloc 주입
                 BlocProvider<AlarmListBloc>(
                   create: (context) =>
                       AlarmListBloc(context.read<AlarmUseCases>())
@@ -97,7 +116,7 @@ class _AlarmRingBootstrapperState extends State<_AlarmRingBootstrapper> {
     final useCases = context.read<AlarmUseCases>();
     final ringer = context.read<AlarmRingerService>();
     final alarms = await useCases.watchAlarms().first;
-    await ringer.rescheduleAll(alarms);
+    await ringer.syncFromStore(alarms);
   }
 
   Future<void> _requestPermissions() async {
@@ -110,19 +129,37 @@ class _AlarmRingBootstrapperState extends State<_AlarmRingBootstrapper> {
   }
 
   void _handleRing(AlarmNotificationPayload payload) {
-    final navigator = appNavigatorKey.currentState;
-    if (navigator == null) {
-      return;
+    _handleRingAsync(payload); // intentionally not awaited
+  }
+
+  Future<void> _handleRingAsync(AlarmNotificationPayload payload) async {
+    final useCases = context.read<AlarmUseCases>();
+    final alarms = await useCases.watchAlarms().first;
+
+    Alarm? match;
+    for (final a in alarms) {
+      if (a.id == payload.alarmId) {
+        match = a;
+        break;
+      }
     }
+    // 삭제된 알람이 울리는 경쟁 상황 — 안전하게 무시
+    if (match == null) return;
+
+    // closure 내에서도 non-nullable로 사용하기 위한 로컬 변수
+    final alarm = match;
+
+    final navigator = appNavigatorKey.currentState;
+    if (navigator == null) return;
 
     navigator.push(
       MaterialPageRoute<void>(
         builder: (_) => AlarmRingingScreen(
-          alarmId: payload.alarmId,
-          hour: payload.hour,
-          minute: payload.minute,
-          label: payload.label,
-          shakeTarget: payload.shakeCount,
+          alarmId: alarm.id,
+          hour: alarm.hour,
+          minute: alarm.minute,
+          label: alarm.label,
+          shakeTarget: alarm.shakeCount,
           onDismiss: () => _dismiss(payload.alarmId),
         ),
       ),
