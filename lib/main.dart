@@ -2,11 +2,12 @@ import 'package:alarm/alarm.dart' as alarm_pkg;
 import 'package:app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:feature_alarm/feature_alarm.dart';
+import 'package:feature_alarm/src/data/schedulers/alarm_ringer_service_impl.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
 import 'core/navigation/app_navigator.dart';
 import 'core/splash/splash_screen.dart';
-import 'features/home/home_screen.dart';
+import 'features/home/home_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +48,7 @@ class _MainAppState extends State<MainApp> {
       themeMode: ThemeMode.system,
       home: _showSplash
           ? SplashScreen(onSplashComplete: _completeSplash)
-          : const HomeScreen(),
+          : const HomeShell(),
     );
   }
 }
