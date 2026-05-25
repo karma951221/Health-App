@@ -1,0 +1,41 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="orangeRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF8C00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF4500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="white"/>
+
+  <!-- Dynamic triangles (upward motion) -->
+  <g transform="translate(512, 480)">
+    <!-- Large triangle base -->
+    <polygon points="0,-200 150,100 -150,100" fill="url(#orangeRed)" opacity="0.3" transform="skewX(-15)"/>
+
+    <!-- Medium triangle -->
+    <polygon points="0,-120 110,50 -110,50" fill="url(#orangeRed)" opacity="0.6" transform="skewX(-15) translateY(-40)"/>
+
+    <!-- Small triangle (jumping) -->
+    <polygon points="0,-40 70,30 -70,30" fill="url(#orangeRed)" opacity="1" transform="skewX(-15) translateY(-90)"/>
+  </g>
+
+  <!-- karma text -->
+  <g transform="translate(512, 680)">
+    <text x="0" y="0" font-family="Inter, -apple-system, sans-serif" font-size="100" font-weight="700" text-anchor="middle" fill="url(#orangeRed)" font-style="italic">
+      karma
+    </text>
+  </g>
+
+  <!-- Arrows pointing up (motion indicator) -->
+  <g transform="translate(300, 300)">
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="url(#orangeRed)" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="0,-50 -15,-20 15,-20" fill="url(#orangeRed)"/>
+  </g>
+
+  <g transform="translate(724, 300)">
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="url(#orangeRed)" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="0,-50 -15,-20 15,-20" fill="url(#orangeRed)"/>
+  </g>
+</svg>

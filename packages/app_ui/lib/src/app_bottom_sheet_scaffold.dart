@@ -10,6 +10,7 @@ class AppBottomSheetScaffold extends StatelessWidget {
     required this.title,
     required this.child,
     this.action,
+    this.heightFactor,
   });
 
   final String title;
@@ -18,27 +19,43 @@ class AppBottomSheetScaffold extends StatelessWidget {
   /// Typically an [AppPrimaryButton]. Pinned above the safe-area bottom.
   final Widget? action;
 
+  /// Fraction (0–1) of the screen height the sheet should occupy. When null
+  /// the sheet sizes to its content; when set, [child] expands to fill the
+  /// space and [action] stays pinned to the bottom.
+  final double? heightFactor;
+
   @override
   Widget build(BuildContext context) {
     final viewInsets = MediaQuery.viewInsetsOf(context);
     final bottomPadding =
         (viewInsets.bottom > 0 ? viewInsets.bottom : MediaQuery.paddingOf(context).bottom) + 16;
+    final expand = heightFactor != null;
 
-    return Padding(
+    final padded = Padding(
       padding: EdgeInsets.fromLTRB(24, 0, 24, bottomPadding),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 20),
-          child,
+          if (expand)
+            Expanded(child: SingleChildScrollView(child: child))
+          else
+            child,
           if (action != null) ...[
             const SizedBox(height: 24),
             action!,
           ],
         ],
       ),
+    );
+
+    if (!expand) return padded;
+
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * heightFactor!,
+      child: padded,
     );
   }
 }

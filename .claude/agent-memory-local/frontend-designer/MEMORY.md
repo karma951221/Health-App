@@ -1,0 +1,2 @@
+- [Design system tokens](design_system.md) — Pretendard font, Zinc/Red color palette, base-8 spacing, Material 3
+- [App architecture & UI patterns](ui_patterns.md) — BLoC/Cubit, BottomSheet entry pattern, AlarmEntrySection structure

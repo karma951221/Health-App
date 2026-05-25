@@ -1,30 +1,53 @@
+import 'package:alarm/alarm.dart' as alarm_pkg;
 import 'package:app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:feature_alarm/feature_alarm.dart';
 
 import 'core/dependency_injection/dependency_injection.dart';
+import 'core/navigation/app_navigator.dart';
+import 'core/splash/splash_screen.dart';
 import 'features/home/home_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initializes the alarm service and restores any persisted alarms.
+  await alarm_pkg.Alarm.init();
 
   runApp(
-    const AppDependencyProvider(
-      child: MainApp(),
+    AppDependencyProvider(
+      alarmRingerService: AlarmRingerServiceImpl(),
+      child: const MainApp(),
     ),
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  bool _showSplash = true;
+
+  void _completeSplash() {
+    setState(() {
+      _showSplash = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Daylog',
+      navigatorKey: appNavigatorKey,
+      title: 'karma',
       theme: AppThemeData.light,
       darkTheme: AppThemeData.dark,
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: _showSplash
+          ? SplashScreen(onSplashComplete: _completeSplash)
+          : const HomeScreen(),
     );
   }
 }

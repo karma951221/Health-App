@@ -7,17 +7,14 @@ import '../shared/shared_widget.dart';
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({
     super.key,
-    required this.onPreviewRinging,
     this.onEditAlarm,
   });
 
-  final VoidCallback onPreviewRinging;
   final void Function(Alarm)? onEditAlarm;
 
   @override
   Widget build(BuildContext context) {
     return AlarmListView(
-      onPreviewRinging: onPreviewRinging,
       onEditAlarm: onEditAlarm,
     );
   }
@@ -26,11 +23,9 @@ class AlarmScreen extends StatelessWidget {
 class AlarmListView extends StatelessWidget {
   const AlarmListView({
     super.key,
-    required this.onPreviewRinging,
     this.onEditAlarm,
   });
 
-  final VoidCallback onPreviewRinging;
   final void Function(Alarm)? onEditAlarm;
 
   String _formatWeekdays(int mask) {
@@ -57,11 +52,6 @@ class AlarmListView extends StatelessWidget {
     return TabScaffold(
       title: '알람',
       subtitle: '일어나야 꺼지는 아침 루틴을 준비해요.',
-      trailing: TextButton.icon(
-        onPressed: onPreviewRinging,
-        icon: const Icon(Icons.play_arrow),
-        label: const Text('울림 미리보기'),
-      ),
       child: BlocBuilder<AlarmListBloc, AlarmListState>(
         builder: (context, state) {
           if (state.status == AlarmListStatus.loading) {

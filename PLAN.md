@@ -1,14 +1,16 @@
-# Health App — 설계 문서
+# Daylog — 설계 문서
 
-> 일일 운동·식단 기록 + 미라클 모닝 알람 (흔들어서 해제)
+> 흔들어야 꺼지는 미라클 모닝 알람 + 해제 직후 오늘 날씨를 보여주는 굿모닝 브리핑
 
 ---
 
 ## 핵심 목적
 
-- 하루하루 운동·식단을 **마찰 없이 기록** (복잡한 입력 없음)
-- **흔들어야만 꺼지는 알람**으로 기상 습관 강제
-- 개인용 MVP — 인증·서버 없이 디바이스 로컬 저장
+- **흔들어야만 꺼지는 알람**으로 기상 습관을 강제한다.
+- 알람을 해제하면 **굿모닝 브리핑**이 떠서 오늘 아침에 필요한 정보(현재 날씨)를 보여준다 — "일어날 이유"를 만든다.
+- 개인용 MVP — 인증·서버 없이 디바이스 로컬 저장 + 외부 날씨 API(open-meteo) 호출.
+
+> **피벗 노트:** 본래 운동·식단 기록 + 알람의 3탭 헬스 앱이었으나, 알람을 핵심으로 남기고 운동·식단은 제거했다. 부가 가치로 아침 날씨 브리핑을 붙였다.
 
 ---
 
@@ -16,172 +18,95 @@
 
 | 역할 | 패키지 |
 |---|---|
-| 플랫폼 | Flutter (iOS + Android 단일 코드베이스) |
+| 플랫폼 | Flutter (Android 우선, iOS 후속) |
 | 상태 관리 | `flutter_bloc` (Cubit / Bloc) |
-| 의존성 주입 | `get_it` + `injectable` |
-| DB | `drift` (타입 안전 SQLite) |
-| 알림·알람 | `flutter_local_notifications` |
-| Android 알람 | `android_alarm_manager_plus` |
-| 사진 | `image_picker` + `path_provider` |
-| 흔들기 감지 | `sensors_plus` |
-| 달력 | `table_calendar` |
-| E2E 테스트 | `patrol` |
+| 의존성 주입 | `provider` (MultiProvider 기반 수동 주입) |
+| DB | `drift` (타입 안전 SQLite) — `infra_local_db` 패키지 |
+| 알람 | `alarm` (사운드·풀스크린·앱 종료 대응) |
+| 권한 | `permission_handler` (알림·정확한 알람) |
+| 위치 | `geolocator` (날씨용 GPS) |
+| 네트워크 | `http` (open-meteo 호출) |
+| 날씨 | open-meteo (무료, API 키 불필요) |
 
----
-
-## 프로젝트 구조
-
-```
-lib/
-├── main.dart                          # await configureDependencies() → runApp
-├── app.dart                           # MaterialApp + BottomNavigationBar
-├── di/
-│   ├── injection.dart                 # @InjectableInit
-│   └── injection.config.dart          # build_runner 생성
-├── core/
-│   ├── db/
-│   │   ├── database.dart              # @singleton (AppDatabase)
-│   │   └── tables/
-│   │       ├── workouts.dart
-│   │       ├── meals.dart
-│   │       └── alarms.dart
-│   ├── notifications/
-│   │   └── notification_service.dart  # @lazySingleton
-│   ├── storage/
-│   │   └── photo_storage.dart         # @lazySingleton
-│   └── theme/theme.dart
-├── features/
-│   ├── workout/
-│   │   ├── data/workout_repository.dart   # @lazySingleton
-│   │   ├── bloc/
-│   │   │   ├── workout_cubit.dart         # @injectable
-│   │   │   └── workout_state.dart
-│   │   └── ui/
-│   │       ├── workout_tab.dart
-│   │       └── workout_entry_sheet.dart
-│   ├── meal/
-│   │   ├── data/meal_repository.dart
-│   │   ├── bloc/
-│   │   │   ├── meal_cubit.dart
-│   │   │   └── meal_state.dart
-│   │   └── ui/
-│   │       ├── meal_tab.dart
-│   │       └── meal_entry_sheet.dart
-│   └── alarm/
-│       ├── data/alarm_repository.dart
-│       ├── alarm_scheduler.dart           # OS별 추상화 @lazySingleton
-│       ├── shake_detector.dart
-│       ├── bloc/
-│       │   ├── alarm_list_cubit.dart      # @injectable
-│       │   ├── alarm_list_state.dart
-│       │   ├── alarm_ringing_bloc.dart    # @injectable (센서 스트림 처리)
-│       │   └── alarm_ringing_state.dart
-│       └── ui/
-│           ├── alarm_tab.dart
-│           ├── alarm_edit_sheet.dart
-│           └── alarm_ringing_screen.dart
-└── shared/widgets/
-    ├── date_header.dart
-    └── empty_state.dart
-```
+### 알려진 미구현 / 후속
+- **실제 흔들기 센서**: 울림 화면의 흔들기는 현재 버튼 mock. `sensors_plus` 연동은 후속.
+- **지하철 실시간 도착 정보**: 브리핑 v2.
+- **iOS**: 위치/알림 권한 및 풀스크린 동작 마감은 후속(현재 Android 우선).
 
 ---
 
 ## 데이터 모델
 
 ```dart
-// 운동 기록
-class Workouts extends Table {
-  IntColumn      get id       => integer().autoIncrement()();
-  DateTimeColumn get loggedAt => dateTime()();
-  TextColumn     get memo     => text()();
-}
-
-// 식단 기록
-class Meals extends Table {
-  IntColumn      get id        => integer().autoIncrement()();
-  DateTimeColumn get loggedAt  => dateTime()();
-  TextColumn     get memo      => text()();
-  TextColumn     get photoPath => text().nullable()();  // 파일명만 (앱 docs/meals/)
-}
-
-// 알람
+// 알람 (drift)
 class Alarms extends Table {
   IntColumn      get id              => integer().autoIncrement()();
   IntColumn      get hour            => integer()();
   IntColumn      get minute          => integer()();
   IntColumn      get weekdayMask     => integer()();  // 7비트 (월=bit0 … 일=bit6), 0=일회성
-  DateTimeColumn get oneShotDate     => dateTime().nullable()(); // 일회성 알람 날짜
-  DateTimeColumn get nextScheduledAt => dateTime().nullable()(); // 디버깅·재예약용
+  DateTimeColumn get oneShotDate     => dateTime().nullable()();
+  DateTimeColumn get nextScheduledAt => dateTime().nullable()();
   BoolColumn     get enabled         => boolean().withDefault(const Constant(true))();
   IntColumn      get shakeCount      => integer().withDefault(const Constant(20))();
   TextColumn     get label           => text().withDefault(const Constant('미라클 모닝'))();
 }
 ```
 
----
-
-## 상태관리 / DI 규약
-
-### Cubit vs Bloc 선택
-- **Cubit** — 단순 CRUD·로딩/성공/실패 (운동 목록, 식단 목록, 알람 목록)
-- **Bloc** — 외부 스트림 이벤트 시퀀스 처리 (알람 울림 화면 ← 가속도계 스트림)
-
-### DI 어노테이션
-| 어노테이션 | 사용 대상 | 수명 |
-|---|---|---|
-| `@singleton` | `AppDatabase` | 앱 전체 1개 |
-| `@lazySingleton` | Repository, Scheduler, Service | 앱 전체 1개 (첫 호출 시 생성) |
-| `@injectable` | Cubit / Bloc | 화면 진입 시마다 새 인스턴스 |
-
-### UI 주입 패턴
-```dart
-BlocProvider(
-  create: (_) => getIt<WorkoutCubit>(),
-  child: const WorkoutTab(),
-)
-```
+> 날씨는 영속화하지 않는다. 브리핑 진입 시 open-meteo에서 실시간 조회한다.
 
 ---
 
 ## 화면 흐름
 
-### 하단 탭 3개: 운동 | 식단 | 알람
+단일 화면 앱(하단 탭 없음).
 
-**운동 탭**
-- 날짜 헤더 (오늘 기본, 달력 아이콘으로 날짜 이동)
-- 기록 리스트 (시각 + 메모)
-- FAB → BottomSheet: 텍스트 입력 + 저장
-- 항목 길게 누름 → 수정/삭제
-
-**식단 탭**
-- 운동 탭과 동일한 날짜 네비게이션
-- 카드에 사진 썸네일 포함
-- FAB → BottomSheet: 메모 + 사진 (카메라/갤러리 선택)
-- 사진 탭 시 풀스크린 뷰
-
-**알람 탭**
-- 알람 목록 (시간 큰 글씨 + 요일 + On/Off 토글)
-- FAB → BottomSheet: 시간 피커, 요일, 흔들기 횟수(10–50), 라벨
-- 탭 시 수정 / 길게 누름 시 삭제
+**알람 화면 (홈)**
+- AppBar "알람" + 알람 목록 (시간 큰 글씨 + 라벨 + 요일 + On/Off 토글)
+- 스와이프로 삭제
+- FAB → BottomSheet: 시간 피커, 반복 요일, 흔들기 횟수(5–100), (라벨)
+- 카드 탭 → 수정 시트
 
 **알람 울림 화면** (전체화면)
-- 큰 시계 + "N번 흔들어서 해제" 진행률 바
-- `AlarmRingingBloc`이 가속도계 스트림 구독
-- `ShakeDetector`가 임계값(`15.0`) + 디바운스(300ms)로 흔들림 여부 판정
-- 목표 횟수 도달 → `BlocListener`가 화면 닫기 + 알람 사운드 정지
+- 큰 시계 + 라벨 + "N번 흔들어서 해제" 진행률 바
+- 목표 횟수 도달 → 알람 정지 후 **굿모닝 브리핑으로 이동**(`pushReplacement`)
+- 좌상단 닫기(x) → 알람만 정지하고 브리핑 없이 종료(중단 경로)
+
+**굿모닝 브리핑 화면**
+- "좋은 아침이에요" + 오늘 날짜/시각
+- 현재 기온 + 날씨 상태 + 당일 최고/최저
+- 상태별 처리: 로딩 / 성공 / 위치권한 거부(재요청) / 영구거부(설정 열기) / 위치서비스 꺼짐(재시도) / 실패(재시도)
+- "시작하기" → 홈으로
 
 ---
 
-## iOS vs Android 알람 동작 차이
+## 권한 흐름
 
-| | Android | iOS |
-|---|---|---|
-| 앱 종료 상태에서 알람 화면 강제 표시 | ✅ (`android_alarm_manager_plus` + 풀스크린 인텐트) | ❌ (OS 정책 제한) |
-| 알람 소리 | 앱이 직접 재생 | 로컬 알림 사운드 |
-| 사용자 개입 필요 | 없음 (자동 화면 열림) | 알림 탭 후 앱 진입 |
+- **알람**: 부팅 시 `permission_handler`로 알림·정확한 알람 권한 요청 (DI 부트스트래퍼).
+- **위치(날씨)**: 브리핑 첫 진입 시 `geolocator`로 지연 요청. 거부/영구거부/서비스꺼짐을 구분해 브리핑 화면에서 안내 + 설정 이동.
 
-> iOS 한계는 어떤 모바일 스택을 써도 동일. 네이티브 Swift로 만들어도 같음.
+---
+
+## 프로젝트 구조 (요지)
+
+```
+lib/
+├── main.dart
+├── core/
+│   ├── dependency_injection/dependency_injection.dart  # Provider 주입 + 알람 부트스트랩
+│   ├── notifications/        # alarm 패키지 래퍼(AlarmRingerService 등)
+│   ├── navigation/app_navigator.dart
+│   └── weather/weather_service.dart                    # open-meteo + MorningWeather 모델
+└── features/
+    ├── home/home_screen.dart            # 단일 알람 화면 셸
+    ├── alarm/                           # 목록·편집·울림 화면
+    ├── briefing/                        # 굿모닝 브리핑 화면 + Cubit
+    └── shared/shared_widget.dart
+
+packages/
+├── app_ui, app_theme, app_shared        # 디자인 시스템·공용 위젯
+├── feature_alarm                        # 알람 도메인·데이터·프레젠테이션
+└── infra_local_db                       # drift DB
+```
 
 ---
 
@@ -189,33 +114,21 @@ BlocProvider(
 
 | Phase | 내용 | 검증 |
 |---|---|---|
-| 1 | 프로젝트 부트스트랩: `flutter create`, 의존성, DI 진입점, 빈 3탭 스캐폴드 | `flutter run` 3탭 전환 확인 |
-| 2 | **알람 POC 우선 검증**: 로컬 알림/스케줄러, 울림 화면, 흔들기 해제 최소 구현 | **Android/iOS 실기기**에서 OS 제약 확인 |
-| 3 | 알람 CRUD: `Alarms` 테이블, `AlarmListCubit`, 알람 탭 UI, 재예약 처리 | 알람 생성·수정·삭제·On/Off 확인 |
-| 4 | DB + 운동 탭: `Workouts` 테이블, `WorkoutRepository`, `WorkoutCubit`, CRUD UI | 위젯 테스트 통과 |
-| 5 | 식단 탭 + 사진: `Meals` 테이블, `image_picker`, `PhotoStorage`, `MealCubit` | 위젯 테스트 통과 |
-| 6 | 달력 네비게이션: `table_calendar` 시트 + 스와이프 날짜 이동 | 날짜별 기록 분리 확인 |
-| 7 | 알람 플랫폼 고도화: Android 풀스크린 인텐트, iOS 알림 탭 → 울림 화면 라우팅 | **실기기** 반복 검증 |
-| 8 | E2E (`patrol`): 운동·식단 추가, 알람 → 흔들어 해제 시나리오 | 자동화 가능한 범위 통과 + 알람 수동 체크리스트 |
+| 1 | 피벗: 운동·식단 제거, 단일 알람 화면 정리 | `flutter analyze` 무결 |
+| 2 | 굿모닝 브리핑(날씨): WeatherService(open-meteo) + 브리핑 화면/Cubit + 위치권한 | 권한 허용/거부 분기 + 날씨 표시 |
+| 3 | 울림 → 브리핑 연결 (정상 해제 시 진입) | 알림→울림→해제→브리핑 흐름 |
+| 4 | (후속) 실제 흔들기 센서(`sensors_plus`) 연동 | 실기기 흔들기 해제 |
+| 5 | (후속) 지하철 실시간 도착 정보 브리핑 v2 | — |
+| 6 | (후속) iOS 권한·풀스크린 마감 | 실기기 |
 
 ---
 
-## 검증 체크리스트 (각 Phase)
+## 검증 체크리스트
 
 ```
-□ dart run build_runner build --delete-conflicting-outputs  # 코드 생성 무결
-□ flutter analyze                                           # 정적 분석 무결
-□ flutter test                                              # 단위·위젯 테스트 통과
-□ flutter run -d <simulator>                                # 양 플랫폼 스모크
-□ (알람 Phase) 실기기에서 예약·울림·화면 진입·흔들기 해제 확인
-□ (알람 Phase) 앱 종료/백그라운드/잠금화면 상태별 동작 확인
+□ flutter pub get
+□ flutter analyze         # 정적 분석 무결
+□ flutter test            # 단위·위젯 테스트 (날씨 파싱 포함)
+□ flutter run -d <device> # 알람 추가/수정, 울림→해제→브리핑, 날씨 표시/거부 안내
+□ (알람) 실기기에서 예약·울림·화면 진입·(mock)흔들기 해제 확인
 ```
-
----
-
-## 확장 예정 (MVP 이후)
-
-- 클라우드 동기화 (Supabase) — Repository 인터페이스 교체
-- 일/주 통계 그래프
-- 체중·수면·걸음수 (HealthKit / Google Fit)
-- 알람 해제 조건 추가 (수학 문제, QR 스캔)

@@ -1,0 +1,29 @@
+<svg viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradOrangeDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B83C00;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background gradient -->
+  <rect width="1080" height="1920" fill="url(#bgGradOrangeDark)"/>
+
+  <!-- Dynamic icon centered -->
+  <g transform="translate(540, 600)">
+    <!-- Dynamic triangles -->
+    <polygon points="0,-100 75,50 -75,50" fill="white" opacity="0.3" transform="skewX(-15)"/>
+    <polygon points="0,-60 55,25 -55,25" fill="white" opacity="0.6" transform="skewX(-15) translateY(-20)"/>
+    <polygon points="0,-20 35,15 -35,15" fill="white" opacity="1" transform="skewX(-15) translateY(-45)"/>
+
+    <!-- karma text -->
+    <text x="0" y="80" font-family="Inter, -apple-system, sans-serif" font-size="70" font-weight="700" text-anchor="middle" fill="white" font-style="italic">
+      karma
+    </text>
+  </g>
+
+  <!-- Subtitle -->
+  <text x="540" y="1200" font-family="Inter, -apple-system, sans-serif" font-size="48" font-weight="400" text-anchor="middle" fill="#FFFFFF" opacity="0.85" font-style="italic">
+    Always on time
+  </text>
+</svg>
